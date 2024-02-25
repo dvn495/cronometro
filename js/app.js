@@ -1,62 +1,54 @@
 
 window.onload = start;
-let play = document.getElementById("chronometer");
-function start(){
-    document.querySelector("#btn-play").addEventListener("click",cronometrar);
-    document.querySelector("#btn-pause").addEventListener("click",parar);
-    document.querySelector("#btn-restart").addEventListener("click",reiniciar);
-    let h = 0;
-    let m = 0;
-    let s = 0;
-    play.innerHTML="00 : 00 : 00";
-}
+const btnPlay = document.getElementById("chronometer");
 
-function cronometrar(){
-    escribir();
-    id = setInterval(escribir,1000);
-    document.querySelector("#btn-play").removeEventListener("click",cronometrar);
-}
-
-function escribir(){
-    var hAux, mAux, sAux;
-    s++;
-    if (s>59){
-        m++;
-        s=0;
-    }else if (m>59) {
-        h++;
-        m=0;
-    }else if (h>24) {
-        h=0;
+function time(){
+    seg++;
+    if (seg > 59){
+        min++;
+        seg = 0;
+    }else if (min > 59) {
+        hrs++;
+        min = 0;
+    }else if (hrs > 24) {
+        hrs = 0;
     }   
-    if (s<10) {
-        sAux="0"+s;
-    } else {
-        sAux=s;
-    }
-    if (m<10) {
-        mAux="0"+m;
-    } else {
-        mAux=m;
-    }
-    if (h<10) {
-        hAux="0"+h;
-    } else {
-        hAux=h;
-    }
-
-    document.getElementById("chronometer").innerHTML = hAux + " : " + mAux + " : " + sAux; 
+    let hrsShow = ("0" + hrs).slice(-2); 
+    let minShow = ("0" + min).slice(-2); 
+    let segShow = ("0" + seg).slice(-2); 
+    btnPlay.innerHTML = hrsShow + " : " + minShow + " : " + segShow; 
+}
+function count(){
+    time();
+    timer = setInterval(time,1000);
+    document.querySelector("#btn-play").removeEventListener("click",count);
 }
 
-function parar(){
-    clearInterval(id);
-    document.querySelector("#btn-play").addEventListener("click",cronometrar);
-
+function stopCounter(){
+    clearInterval(timer);
+    document.querySelector("#btn-play").addEventListener("click",count);
 }
 
-function reiniciar(){
-    clearInterval(id);
-    document.getElementById("chronometer").innerHTML="00:00:00";
-    h=0;m=0;s=0;
-    document.querySelector("#btn-play").addEventListener("click",cronometrar);
+function restartCounter(){
+    hrs=0;
+    min=0;
+    seg=0;
+    clearInterval(timer);
+    btnPlay.innerHTML="00 : 00 : 00";
+    document.querySelector("#btn-play").addEventListener("click",count);
 }
+
+function start(){
+    hrs = 0;
+    min = 0;
+    seg = 0;
+    document.querySelector("#btn-play").addEventListener("click",count);
+    document.querySelector("#btn-pause").addEventListener("click",stopCounter);
+    document.querySelector("#btn-restart").addEventListener("click",restartCounter); 
+    btnPlay.innerHTML="00  :  00  :  00";
+}
+
+
+
+
+
